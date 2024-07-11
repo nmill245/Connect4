@@ -15,13 +15,19 @@ class Board(object):
         screen.clear()
         for y in range(self.cols):
             for x in range(self.rows):
-                screen.addch(y*2, x*2 + 1, str(int(self.board[y][x])))
-                screen.addch(y, x*2+2, curses.ACS_VLINE)
-                screen.addch(y, x*2, curses.ACS_VLINE)
-                screen.addch(y*2, x*2+2, curses.ACS_VLINE)
-                screen.addch(y*2, x*2, curses.ACS_VLINE)
-                screen.addch(y*2 + 1, x*2 + 1, curses.ACS_HLINE)
-                screen.addch(y*2 + 1, x*2, curses.ACS_VLINE)
-                screen.addch(y*2 + 1, x*2+2, curses.ACS_VLINE)
+                xval = ((84 - self.rows * 2 + 1 ) // 2) + x*2 + 1
+                yval = ((21 - self.cols * 2 + 1 ) // 2) + y*2 + 1
+                screen.addch(yval, xval, str(int(self.board[y][x])))
+
+                screen.addch(yval, xval-1, curses.ACS_VLINE)
+                screen.addch(yval, xval+1, curses.ACS_VLINE)
+
+                screen.addch(yval-1, xval, curses.ACS_HLINE)
+                screen.addch(yval+1, xval, curses.ACS_HLINE)
+
+                screen.addch(yval-1, xval-1, curses.ACS_PLUS)
+                screen.addch(yval-1, xval+1, curses.ACS_PLUS)
+                screen.addch(yval+1, xval-1, curses.ACS_PLUS)
+                screen.addch(yval+1, xval+1, curses.ACS_PLUS)
         screen.refresh()
 
