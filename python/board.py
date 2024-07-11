@@ -8,4 +8,7 @@ class Board(object):
         self.cols: int = 7
         self.board: NDArray = np.zeros((self.rows, self.cols))
         self.screen: curses.window = screen
+    def printBoard(self):
+        self.screen.addstr(0, 0, "Hello World")
+        self.screen.refresh()
 

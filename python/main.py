@@ -1,12 +1,28 @@
 import board
 import curses
+import time
 
-def main():
+
+def initScreen() -> curses.window:
     stdscr: curses.window = curses.initscr()
-    board1 = board.Board(stdscr)
-    print(board1.rows)
+    stdscr.keypad(True)
+    curses.noecho()
+    return stdscr
+
+def destroyScreen(stdscr: curses.window) -> None:
+    stdscr.keypad(False)
     curses.echo()
     curses.endwin()
-
+def main():
+    stdscr: curses.window =  initScreen()
+    try:
+        board1 = board.Board(stdscr)
+        board1.printBoard()
+        time.sleep(3)
+    except:
+        print('Error')
+    finally:
+        destroyScreen(stdscr)
+    
 if __name__ == '__main__':
     main()
