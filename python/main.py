@@ -6,12 +6,14 @@ import time
 def initScreen() -> curses.window:
     stdscr: curses.window = curses.initscr()
     stdscr.keypad(True)
+    curses.nocbreak()
     curses.noecho()
     return stdscr
 
 def destroyScreen(stdscr: curses.window) -> None:
     stdscr.keypad(False)
     curses.echo()
+    curses.cbreak()
     curses.endwin()
 def main():
     stdscr: curses.window =  initScreen()
