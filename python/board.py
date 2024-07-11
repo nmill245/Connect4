@@ -15,7 +15,13 @@ class Board(object):
         screen.clear()
         for y in range(self.cols):
             for x in range(self.rows):
-                screen.addch(y, x*2 + 1, str(int(self.board[y][x])))
+                screen.addch(y*2, x*2 + 1, str(int(self.board[y][x])))
+                screen.addch(y, x*2+2, curses.ACS_VLINE)
                 screen.addch(y, x*2, curses.ACS_VLINE)
+                screen.addch(y*2, x*2+2, curses.ACS_VLINE)
+                screen.addch(y*2, x*2, curses.ACS_VLINE)
+                screen.addch(y*2 + 1, x*2 + 1, curses.ACS_HLINE)
+                screen.addch(y*2 + 1, x*2, curses.ACS_VLINE)
+                screen.addch(y*2 + 1, x*2+2, curses.ACS_VLINE)
         screen.refresh()
 
