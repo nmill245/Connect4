@@ -1,11 +1,12 @@
 import board
-
+import curses
 
 def main():
-    print('Hello World')
-    print("Me TOO!!")
-    board1 = board.Board("test")
+    stdscr: curses.window = curses.initscr()
+    board1 = board.Board(stdscr)
     print(board1.rows)
+    curses.echo()
+    curses.endwin()
 
 if __name__ == '__main__':
     main()
