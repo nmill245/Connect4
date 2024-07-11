@@ -15,12 +15,13 @@ def destroyScreen(stdscr: curses.window) -> None:
     curses.echo()
     curses.cbreak()
     curses.endwin()
+
 def main():
     stdscr: curses.window =  initScreen()
     try:
         board1 = board.Board(stdscr)
         board1.printBoard()
-        time.sleep(3)
+        time.sleep(5)
     except:
         print('Error')
     finally:
