@@ -12,6 +12,20 @@ class Board(object):
         self._board: NDArray = np.zeros((self._rows, self._cols))
         self._screen: curses.window = screen
 
+    def _getChar(self, val: int) -> str:
+        if(val == 0):
+            return 'X'
+        else:
+            return 'O'
+
+    def _getColor(self, val: int) -> int:
+        if val == self._player1piece:
+            return curses.color_pair(curses.COLOR_BLUE)
+        if val == self._player2piece:
+            return curses.color_pair(curses.COLOR_RED)
+        return curses.color_pair(curses.COLOR_WHITE)
+
+
     def printBoard(self):
         screen: curses.window = self._screen
         screen.clear()
@@ -19,7 +33,7 @@ class Board(object):
             for x in range(self._rows):
                 xval = ((84 - self._rows * 2 + 1 ) // 2) + x*2 + 1
                 yval = ((21 - self._cols * 2 + 1 ) // 2) + y*2 + 1
-                screen.addch(yval, xval, str(int(self._board[y][x])))
+                screen.addch(yval, xval, self._getChar(int(self._board[y][x])), self._getColor(self._board[y][x]))
 
                 screen.addch(yval, xval-1, curses.ACS_VLINE)
                 screen.addch(yval, xval+1, curses.ACS_VLINE)

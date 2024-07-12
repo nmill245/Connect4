@@ -5,10 +5,17 @@ import time
 
 def initScreen() -> curses.window:
     stdscr: curses.window = curses.initscr()
+    curses.start_color()
     stdscr.keypad(True)
     curses.nocbreak()
     curses.noecho()
+    curses.use_default_colors()
+    initColors()
     return stdscr
+def initColors():
+    curses.init_pair(curses.COLOR_WHITE, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
 
 def destroyScreen(stdscr: curses.window) -> None:
     stdscr.keypad(False)
