@@ -5,19 +5,21 @@ import curses
 class Board(object):
     
     def __init__(self, screen):
-        self.rows: int = 7
-        self.cols: int = 7
-        self.board: NDArray = np.zeros((self.rows, self.cols))
-        self.screen: curses.window = screen
+        self._player1piece: int = 1
+        self._player2piece: int = 2
+        self._rows: int = 7
+        self._cols: int = 7
+        self._board: NDArray = np.zeros((self._rows, self._cols))
+        self._screen: curses.window = screen
 
     def printBoard(self):
-        screen: curses.window = self.screen
+        screen: curses.window = self._screen
         screen.clear()
-        for y in range(self.cols):
-            for x in range(self.rows):
-                xval = ((84 - self.rows * 2 + 1 ) // 2) + x*2 + 1
-                yval = ((21 - self.cols * 2 + 1 ) // 2) + y*2 + 1
-                screen.addch(yval, xval, str(int(self.board[y][x])))
+        for y in range(self._cols):
+            for x in range(self._rows):
+                xval = ((84 - self._rows * 2 + 1 ) // 2) + x*2 + 1
+                yval = ((21 - self._cols * 2 + 1 ) // 2) + y*2 + 1
+                screen.addch(yval, xval, str(int(self._board[y][x])))
 
                 screen.addch(yval, xval-1, curses.ACS_VLINE)
                 screen.addch(yval, xval+1, curses.ACS_VLINE)
@@ -29,5 +31,18 @@ class Board(object):
                 screen.addch(yval-1, xval+1, curses.ACS_PLUS)
                 screen.addch(yval+1, xval-1, curses.ACS_PLUS)
                 screen.addch(yval+1, xval+1, curses.ACS_PLUS)
+        yval = ((21 - self._cols * 2 + 1 ) // 2) + self._cols*2 + 1
+        for x in range(self._rows):
+            xval = ((84 - self._rows * 2 + 1 ) // 2) + x*2 + 1
+            screen.addch(yval, xval, str(x + 1))
         screen.refresh()
+    def addMove(self, col: int, player1: bool) -> bool:
+        movecol = col - 1
+        moveTaken = False
+        for i in range(self._rows - 1, -1, -1):
+            if(self._board[i][movecol] == 0):
+                self._board[i][movecol] = self._player1piece if player1 else self._player2piece
+                moveTaken = True
+                break
+        return moveTaken
 

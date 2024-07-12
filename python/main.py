@@ -22,6 +22,12 @@ def main():
         board1 = board.Board(stdscr)
         board1.printBoard()
         time.sleep(5)
+        board1.addMove(1, True)
+        board1.printBoard()
+        time.sleep(5)
+        board1.addMove(1, False)
+        board1.printBoard()
+        time.sleep(5)
     except:
         print('Error')
     finally:
