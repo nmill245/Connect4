@@ -75,3 +75,15 @@ class Board():
                 move_taken = True
                 break
         return move_taken
+    def get_moves(self) -> list[int]:
+        """
+        A function to return the list of columns that have moves possible
+        """
+        move_list = []
+        for col in range(self._cols):
+            for cell in self._board[col]:
+                if int(cell) == 0:
+                    move_list.append(col)
+                    break
+        return move_list
+
