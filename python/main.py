@@ -19,6 +19,7 @@ def init_screen() -> curses.window:
     curses.use_default_colors()
     init_colors()
     return stdscr
+
 def init_colors():
     """
     This function creates the color pairs used in the board:
@@ -39,6 +40,11 @@ def destroy_screen(stdscr: curses.window) -> None:
     curses.echo()
     curses.cbreak()
     curses.endwin()
+
+def init_game(stdscr: curses.window):
+    stdscr.addstr(0, 10, "Welcome to Connect4")
+    stdscr.refresh()
+    pass
 
 def main():
     """

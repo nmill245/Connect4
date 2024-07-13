@@ -86,4 +86,3 @@ class Board():
                     move_list.append(col)
                     break
         return move_list
-
