@@ -52,23 +52,35 @@ def init_game(stdscr: curses.window):
     c = stdscr.getch()
     while c != ord('1') and c != ord('2') and c != ord('q'):
         stdscr.addstr(2, 10, "Please enter a valid key")
-        stdscr.addstr(3, 10, f"{c}")
-        stdscr.addstr(4, 10, f"{ord('1')}")
-        stdscr.addstr(5, 10, f"{ord('2')}")
-        stdscr.addstr(5, 10, f"{ord('q')}")
         stdscr.refresh()
         c = stdscr.getch()
     stdscr.clear()
     stdscr.addstr(2, 10, "You have entered a valid key")
     stdscr.refresh()
     if c == ord('1'):
-        return 1
+        return get_name(stdscr, 1)
     if c == ord('2'):
-        return 2
+        return get_name(stdscr, 2)
     if c == ord('q'):
         return 0
     stdscr.refresh()
     return -1
+
+def get_name(stdscr: curses.window, playeramt: int):
+    """
+    Get the player's names
+    """
+    i = 0
+    names = []
+    while i < playeramt:
+        curses.echo()
+        curses.cbreak()
+        stdscr.clear()
+        stdscr.addstr(0, 10, f"Please enter player {i + 1}'s Name:\n")
+        name = stdscr.getstr().decode(encoding='utf-8')
+        names.append(name)
+        i += 1
+    return names
 
 def main():
     """
@@ -76,22 +88,18 @@ def main():
     """
     stdscr: curses.window =  init_screen()
     try:
-        board1 = board.Board(stdscr)
-        count = init_game(stdscr)
-        if count == 1:
-            pass
-        if count == 2:
-            pass
-        if count == 0:
+        names = init_game(stdscr)
+        if names in (0, -1):
             destroy_screen(stdscr)
             sys.exit()
-        board1.print_board()
+        board1 = board.Board(stdscr, names)
+        board1.print_board(True)
         time.sleep(5)
         board1.add_move(1, True)
-        board1.print_board()
+        board1.print_board(False)
         time.sleep(5)
         board1.add_move(1, False)
-        board1.print_board()
+        board1.print_board(True)
         time.sleep(5)
     except:
         print('Error')
