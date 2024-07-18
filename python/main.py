@@ -3,7 +3,6 @@ The main function to operate the Connect4 Game
 """
 import sys
 import curses
-import time
 import board
 
 def init_screen() -> curses.window:
@@ -21,7 +20,7 @@ def init_screen() -> curses.window:
     init_colors()
     return stdscr
 
-def init_colors():
+def init_colors() -> None:
     """
     This function creates the color pairs used in the board:
     White - White on Black
@@ -74,14 +73,28 @@ def get_name(stdscr: curses.window, playeramt: int):
     names = []
     while i < playeramt:
         curses.echo()
-        curses.cbreak()
+        curses.nocbreak()
         stdscr.clear()
         stdscr.addstr(0, 10, f"Please enter player {i + 1}'s Name:\n")
         name = stdscr.getstr().decode(encoding='utf-8')
         names.append(name)
         i += 1
+    curses.noecho()
+    curses.cbreak()
     return names
 
+def get_user_move(stdscr: curses.window, game_board: board.Board):
+    """
+    A function to retrieve the next user move
+    """
+    c = stdscr.getch()
+    valid_move_list = game_board.get_move_chrs()
+    valid_move_list.append(ord('q'))
+    while c not in valid_move_list:
+        stdscr.addstr(20, 20, "Please enter a valid move. For example (1), (2), ...")
+        stdscr.refresh()
+        c = stdscr.getch()
+    return chr(c)
 def main():
     """
     A main function to operate the game loop
@@ -92,15 +105,13 @@ def main():
         if names in (0, -1):
             destroy_screen(stdscr)
             sys.exit()
-        board1 = board.Board(stdscr, names)
-        board1.print_board(True)
-        time.sleep(5)
-        board1.add_move(1, True)
-        board1.print_board(False)
-        time.sleep(5)
-        board1.add_move(1, False)
-        board1.print_board(True)
-        time.sleep(5)
+        game_board = board.Board(stdscr, names)
+        while len(game_board.get_moves()) != 0:
+            game_board.print_board(True)
+            move_col = get_user_move(stdscr, game_board)
+            if move_col == 'q':
+                break
+            print(move_col)
     except:
         print('Error')
     finally:

@@ -35,7 +35,7 @@ class Board():
         return curses.color_pair(curses.COLOR_WHITE)
 
 
-    def print_board(self, player1Turn):
+    def print_board(self, player1_turn):
         """
         Prints the current board state to the terminal
         """
@@ -62,7 +62,7 @@ class Board():
         for x in range(self._rows):
             xval = ((84 - self._rows * 2 + 1 ) // 2) + x*2 + 1
             screen.addch(yval, xval, str(x + 1))
-        screen.addstr(19, 10, f"{self._names[0] if player1Turn else self._names[1]}'s turn")
+        screen.addstr(19, 10, f"{self._names[0] if player1_turn else self._names[1]}'s turn")
         screen.refresh()
 
     def add_move(self, col: int, player1: bool) -> bool:
@@ -80,6 +80,7 @@ class Board():
                 move_taken = True
                 break
         return move_taken
+
     def get_moves(self) -> list[int]:
         """
         A function to return the list of columns that have moves possible
@@ -91,3 +92,13 @@ class Board():
                     move_list.append(col)
                     break
         return move_list
+
+    def get_move_chrs(self) -> list[int]:
+        """
+        A function to return what character values as ints are valid moves
+        """
+        move_list = self.get_moves()
+        final_list = []
+        for move in move_list:
+            final_list.append(ord(str(move + 1)))
+        return final_list
