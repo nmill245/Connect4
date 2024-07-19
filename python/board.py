@@ -62,7 +62,8 @@ class Board():
         for x in range(self._rows):
             xval = ((84 - self._rows * 2 + 1 ) // 2) + x*2 + 1
             screen.addch(yval, xval, str(x + 1))
-        screen.addstr(19, 10, f"{self._names[0] if player1_turn else self._names[1]}'s turn")
+        screen.addstr(19, 10, f"{self._names[0] if player1_turn else self._names[1]}'s turn", \
+                      self._get_color(int(player1_turn) + 2 - 2 * int(player1_turn)))
         screen.refresh()
 
     def add_move(self, col: int, player1: bool) -> bool:
@@ -86,10 +87,10 @@ class Board():
         A function to return the list of columns that have moves possible
         """
         move_list = []
-        for col in range(self._cols):
-            for cell in self._board[col]:
-                if int(cell) == 0:
-                    move_list.append(col)
+        for row in range(self._rows):
+            for col in range(self._cols):
+                if(self._board[col][row] == 0):
+                    move_list.append(row)
                     break
         return move_list
 

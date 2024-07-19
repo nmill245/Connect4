@@ -41,7 +41,7 @@ def destroy_screen(stdscr: curses.window) -> None:
     curses.nocbreak()
     curses.endwin()
 
-def init_game(stdscr: curses.window):
+def init_game(stdscr: curses.window) -> list[str]:
     """
     The function to start the game
     """
@@ -61,11 +61,11 @@ def init_game(stdscr: curses.window):
     if c == ord('2'):
         return get_name(stdscr, 2)
     if c == ord('q'):
-        return 0
+        return []
     stdscr.refresh()
-    return -1
+    return []
 
-def get_name(stdscr: curses.window, playeramt: int):
+def get_name(stdscr: curses.window, playeramt: int) -> list[str]:
     """
     Get the player's names
     """
@@ -83,18 +83,21 @@ def get_name(stdscr: curses.window, playeramt: int):
     curses.cbreak()
     return names
 
-def get_user_move(stdscr: curses.window, game_board: board.Board):
+def get_user_move(stdscr: curses.window, game_board: board.Board) -> str:
     """
     A function to retrieve the next user move
     """
-    c = stdscr.getch()
     valid_move_list = game_board.get_move_chrs()
     valid_move_list.append(ord('q'))
+    stdscr.addstr(20, 20, f"Valid move list: {valid_move_list}")
+    stdscr.refresh()
+    c = stdscr.getch()
     while c not in valid_move_list:
         stdscr.addstr(20, 20, "Please enter a valid move. For example (1), (2), ...")
         stdscr.refresh()
         c = stdscr.getch()
     return chr(c)
+
 def main():
     """
     A main function to operate the game loop
@@ -102,16 +105,18 @@ def main():
     stdscr: curses.window =  init_screen()
     try:
         names = init_game(stdscr)
-        if names in (0, -1):
+        if len(names) == 0:
             destroy_screen(stdscr)
             sys.exit()
         game_board = board.Board(stdscr, names)
+        player1_turn : bool = True
         while len(game_board.get_moves()) != 0:
-            game_board.print_board(True)
+            game_board.print_board(player1_turn)
             move_col = get_user_move(stdscr, game_board)
             if move_col == 'q':
                 break
-            print(move_col)
+            game_board.add_move(int(move_col), player1_turn)
+            player1_turn = not player1_turn
     except:
         print('Error')
     finally:
