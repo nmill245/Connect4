@@ -110,7 +110,7 @@ def main():
             sys.exit()
         game_board = board.Board(stdscr, names)
         player1_turn : bool = True
-        while len(game_board.get_moves()) != 0:
+        while len(game_board.get_moves()) != 0 and not game_board.check_win():
             game_board.print_board(player1_turn)
             move_col = get_user_move(stdscr, game_board)
             if move_col == 'q':

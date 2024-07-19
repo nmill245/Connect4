@@ -82,6 +82,37 @@ class Board():
                 break
         return move_taken
 
+    def check_win(self) -> bool:
+        """
+        Returns true if the board has a winning position, false otherwise
+        """
+
+        board = self._board
+        #check every col
+        for col in range(self._cols):
+            for row in range(self._rows-3):
+                if(board[col][row] == board[col][row+1] and board[col][row+1] == board[col][row+2] \
+                       and board[col][row+2] == board[col][row+3] and board[col][row] != 0):
+                    return True
+        #check every row
+        for row in range(self._rows):
+            for col in range(self._cols-3):
+                if(board[col][row] != 0 and board[col][row] != 0 and board[col][row] == board[col+1][row] and board[col+1][row] == board[col+2][row] \
+                       and board[col+2][row] == board[col+3][row]):
+                    return True
+        #check postive diagonal
+        for col in range(self._cols-3):
+            for row in range(self._rows-3):
+                if(board[col][row] != 0 and board[col][row] == board[col+1][row+1] \
+                   and board[col+1][row+1] == board[col+2][row+2] and board[col+2][row+2] == board[col+3][row+3]):
+                    return True
+        #check negative diagonal
+        for col in range(3, self._cols):
+            for row in range(self._rows-3):
+                if(board[col][row] != 0 and board[col][row] == board[col-1][row+1] \
+                   and board[col-1][row+1] == board[col-2][row+2] and board[col-2][row+2] == board[col-3][row+3]):
+                    return True
+        return False
     def get_moves(self) -> list[int]:
         """
         A function to return the list of columns that have moves possible
@@ -89,7 +120,7 @@ class Board():
         move_list = []
         for row in range(self._rows):
             for col in range(self._cols):
-                if(self._board[col][row] == 0):
+                if self._board[col][row] == 0:
                     move_list.append(row)
                     break
         return move_list
