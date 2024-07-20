@@ -89,7 +89,6 @@ def get_user_move(stdscr: curses.window, game_board: board.Board) -> str:
     """
     valid_move_list = game_board.get_move_chrs()
     valid_move_list.append(ord('q'))
-    stdscr.addstr(20, 20, f"Valid move list: {valid_move_list}")
     stdscr.refresh()
     c = stdscr.getch()
     while c not in valid_move_list:
