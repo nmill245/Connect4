@@ -2,6 +2,7 @@
 The main function to operate the Connect4 Game
 """
 import random as rand
+import sys
 import time
 import curses
 import board
@@ -116,6 +117,8 @@ def main():
                 game_board.print_board(player1_turn)
                 move_col = get_user_move(stdscr, game_board)
                 if move_col == 'q':
+                    destroy_screen(stdscr)
+                    sys.exit()
                     break
                 game_board.add_move(int(move_col), player1_turn)
                 player1_turn = not player1_turn
