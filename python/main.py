@@ -1,6 +1,8 @@
 """
 The main function to operate the Connect4 Game
 """
+import random as rand
+import time
 import sys
 import curses
 import board
@@ -30,6 +32,7 @@ def init_colors() -> None:
     curses.init_pair(curses.COLOR_WHITE, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.init_pair(curses.COLOR_BLUE, curses.COLOR_BLUE, curses.COLOR_BLACK)
     curses.init_pair(curses.COLOR_RED, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(curses.COLOR_YELLOW, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
 def destroy_screen(stdscr: curses.window) -> None:
     """
@@ -108,7 +111,7 @@ def main():
             destroy_screen(stdscr)
             sys.exit()
         game_board = board.Board(stdscr, names)
-        player1_turn : bool = True
+        player1_turn : bool = rand.randint(0, 100) < 50
         while len(game_board.get_moves()) != 0 and not game_board.check_win():
             game_board.print_board(player1_turn)
             move_col = get_user_move(stdscr, game_board)
@@ -116,6 +119,8 @@ def main():
                 break
             game_board.add_move(int(move_col), player1_turn)
             player1_turn = not player1_turn
+        game_board.print_board(not player1_turn)
+        time.sleep(5)
     except:
         print('Error')
     finally:
