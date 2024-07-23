@@ -3,7 +3,6 @@ The main function to operate the Connect4 Game
 """
 import random as rand
 import time
-import sys
 import curses
 import board
 
@@ -48,6 +47,7 @@ def init_game(stdscr: curses.window) -> list[str]:
     """
     The function to start the game
     """
+    stdscr.clear()
     stdscr.addstr(0, 10, "Welcome to Connect4")
     stdscr.addstr(1, 10, "Will you have (1) or (2) Players? (q)uit")
     stdscr.refresh()
@@ -100,6 +100,8 @@ def get_user_move(stdscr: curses.window, game_board: board.Board) -> str:
         c = stdscr.getch()
     return chr(c)
 
+
+
 def main():
     """
     A main function to operate the game loop
@@ -107,20 +109,19 @@ def main():
     stdscr: curses.window =  init_screen()
     try:
         names = init_game(stdscr)
-        if len(names) == 0:
-            destroy_screen(stdscr)
-            sys.exit()
-        game_board = board.Board(stdscr, names)
-        player1_turn : bool = rand.randint(0, 100) < 50
-        while len(game_board.get_moves()) != 0 and not game_board.check_win():
-            game_board.print_board(player1_turn)
-            move_col = get_user_move(stdscr, game_board)
-            if move_col == 'q':
-                break
-            game_board.add_move(int(move_col), player1_turn)
-            player1_turn = not player1_turn
-        game_board.print_board(not player1_turn)
-        time.sleep(5)
+        while len(names) != 0:
+            game_board = board.Board(stdscr, names)
+            player1_turn : bool = rand.randint(0, 100) < 50
+            while len(game_board.get_moves()) != 0 and not game_board.check_win():
+                game_board.print_board(player1_turn)
+                move_col = get_user_move(stdscr, game_board)
+                if move_col == 'q':
+                    break
+                game_board.add_move(int(move_col), player1_turn)
+                player1_turn = not player1_turn
+            game_board.print_board(not player1_turn)
+            time.sleep(1)
+            names = init_game(stdscr)
     except:
         print('Error')
     finally:

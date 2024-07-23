@@ -66,11 +66,13 @@ class Board():
         for x in range(self._rows):
             xval = ((84 - self._rows * 2 + 1 ) // 2) + x*2 + 1
             screen.addch(yval, xval, str(x + 1))
-        if not self._haswon:
-            screen.addstr(19, 10, f"{self._names[0] if player1_turn else self._names[1]}'s turn", \
-                      self._get_color(int(player1_turn) + 2 - 2 * int(player1_turn)))
-        elif self._haswon:
+        if self._haswon:
             screen.addstr(19, 10, f"{self._names[0] if player1_turn else self._names[1]} has won!!", \
+                      self._get_color(int(player1_turn) + 2 - 2 * int(player1_turn)))
+        elif len(self.get_moves()) == 0:
+            screen.addstr(19, 10, "It's a tie!!")
+        elif not self._haswon:
+            screen.addstr(19, 10, f"{self._names[0] if player1_turn else self._names[1]}'s turn", \
                       self._get_color(int(player1_turn) + 2 - 2 * int(player1_turn)))
         screen.refresh()
 
