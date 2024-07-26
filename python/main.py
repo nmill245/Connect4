@@ -10,7 +10,8 @@ import screen
 
 def min_max(maximizing_player: bool, alpha: int, beta: int, max_depth: int, gameboard: board.Board) -> (int, int):
     if max_depth == 0:
-        return gameboard.score_board(maximizing_player)
+        return (0, gameboard.score_board(maximizing_player))
+    return (0, 0)
 
 
 def main():
