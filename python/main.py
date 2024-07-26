@@ -2,14 +2,18 @@
 The main function to operate the Connect4 Game
 """
 import random as rand
+import math
 import sys
 import time
 import curses
 import board
 import screen
 
-def min_max(maximizing_player: bool, alpha: int, beta: int, max_depth: int, gameboard: board.Board) -> (int, int):
-    if max_depth == 0:
+def min_max(maximizing_player: bool, alpha: float, beta: float, max_depth: int, gameboard: board.Board) -> tuple[int, int]:
+    """
+    An algorithm to return the best move to make at a given board position, looking 5 moves in advance
+    """
+    if max_depth == 0 or gameboard.check_win():
         return (0, gameboard.score_board(maximizing_player))
     return (0, 0)
 
@@ -34,7 +38,7 @@ def main():
                     game_board.add_move(int(move_col), player1_turn)
                     player1_turn = not player1_turn
                 else:
-                    move_col, _ = min_max(player1_turn, 0, 0, 5, game_board)
+                    move_col, _ = min_max(player1_turn, -math.inf, math.inf, 5, game_board)
             game_board.print_board(not player1_turn)
             time.sleep(1)
             names = screen.init_game(stdscr)

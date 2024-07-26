@@ -38,6 +38,14 @@ class Board():
             return curses.color_pair(curses.COLOR_YELLOW)
         return curses.color_pair(curses.COLOR_WHITE)
 
+    def score_board(self, player1_turn):
+        """
+        A function to score the board at a given state
+        """
+        if player1_turn:
+            return 1
+        return -1
+        pass
 
     def print_board(self, player1_turn):
         """
