@@ -40,14 +40,23 @@ class Board():
             return curses.color_pair(curses.COLOR_YELLOW)
         return curses.color_pair(curses.COLOR_WHITE)
 
+    def _scoresection(self, startcol: int, startrow: int, player1: bool) -> int:
+        return startcol - startrow * (-1 * player1)
+
     def score_board(self, player1_turn) -> int:
         """
         A function to score the board at a given state
         """
         if self._haswon:
             return -100_000 * (-1 * (player1_turn == self._player_1_win))
-        return 0
+        player1score: int = 0
+        player2score: int = 0
+        for col in range(3, self._cols):
+            for row in range(3, self._rows):
+                player1score = self._scoresection(col - 3, row - 3, True)
+                player2score = self._scoresection(col - 3, row - 3, False)
 
+        return player1score - player2score * (-1 * player1_turn)
     def print_board(self, player1_turn):
         """
         Prints the current board state to the terminal
