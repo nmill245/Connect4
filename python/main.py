@@ -9,13 +9,36 @@ import curses
 import board
 import screen
 
-def min_max(maximizing_player: bool, alpha: float, beta: float, max_depth: int, gameboard: board.Board) -> tuple[int, int]:
+def min_max(maximizing_player: bool, alpha: float, beta: float, max_depth: int, gameboard: board.Board) \
+    -> tuple[int, float]:
     """
     An algorithm to return the best move to make at a given board position, looking 5 moves in advance
     """
     if max_depth == 0 or gameboard.check_win():
-        return (0, gameboard.score_board(maximizing_player))
-    return (0, 0)
+        return (-1, gameboard.score_board(maximizing_player))
+    if maximizing_player:
+        score:float = -math.inf
+        move_list: list[int] = gameboard.get_moves()
+        commited_move:int = -1
+        for move in move_list:
+            commited_move = move
+            gameboard.add_move(move + 1, maximizing_player)
+            move, score = min_max(not maximizing_player, alpha, beta, max_depth - 1, gameboard)
+            if score > beta:
+                break
+            alpha = max(alpha, score)
+        return (commited_move, score)
+    score:float = math.inf
+    move_list: list[int] = gameboard.get_moves()
+    commited_move: int = -1
+    for move in move_list:
+        commited_move = move
+        gameboard.add_move(move + 1, maximizing_player)
+        move, score = min_max(not maximizing_player, alpha, beta, max_depth - 1, gameboard)
+        if score < alpha:
+            break
+        beta = score
+    return commited_move, score
 
 
 def main():

@@ -14,8 +14,10 @@ class Board():
     def __init__(self, screen, names):
         self._player1piece: int = 1
         self._player2piece: int = 2
-        self._winningpiece: int = 5
+        self._winning_1_piece: int = 3
+        self._winning_2_piece: int = 4
         self._haswon: bool = False
+        self._player_1_win: bool = False
         self._rows: int = 7
         self._cols: int = 7
         self._board: NDArray = np.zeros((self._rows, self._cols))
@@ -34,18 +36,17 @@ class Board():
             return curses.color_pair(curses.COLOR_BLUE)
         if val == self._player2piece:
             return curses.color_pair(curses.COLOR_RED)
-        if val == self._winningpiece:
+        if val >= self._winning_1_piece:
             return curses.color_pair(curses.COLOR_YELLOW)
         return curses.color_pair(curses.COLOR_WHITE)
 
-    def score_board(self, player1_turn):
+    def score_board(self, player1_turn) -> int:
         """
         A function to score the board at a given state
         """
-        if player1_turn:
-            return 1
-        return -1
-        pass
+        if self._haswon:
+            return -100_000 * (-1 * (player1_turn == self._player_1_win))
+        return 0
 
     def print_board(self, player1_turn):
         """
@@ -111,44 +112,52 @@ class Board():
             for row in range(self._rows-3):
                 if(board[col][row] == board[col][row+1] and board[col][row+1] == board[col][row+2] \
                        and board[col][row+2] == board[col][row+3] and board[col][row] != 0):
-                    board[col][row] = self._winningpiece
-                    board[col][row+1] = self._winningpiece
-                    board[col][row+2] = self._winningpiece
-                    board[col][row+3] = self._winningpiece
+                    piece = board[col][row]
+                    board[col][row] = piece + 2
+                    board[col][row+1] = piece + 2
+                    board[col][row+2] = piece + 2
+                    board[col][row+3] = piece + 2
                     self._haswon = True
+                    self._player_1_win = piece == self._player1piece
                     return True
         #check every row
         for row in range(self._rows):
             for col in range(self._cols-3):
-                if(board[col][row] != 0 and board[col][row] != 0 and board[col][row] == board[col+1][row] and board[col+1][row] == board[col+2][row] \
-                       and board[col+2][row] == board[col+3][row]):
-                    board[col][row] = self._winningpiece
-                    board[col+1][row] = self._winningpiece
-                    board[col+2][row] = self._winningpiece
-                    board[col+3][row] = self._winningpiece
+                if(board[col][row] != 0 and board[col][row] != 0 and board[col][row] == board[col+1][row] \
+                   and board[col+1][row] == board[col+2][row] and board[col+2][row] == board[col+3][row]):
+                    piece = board[col][row]
+                    board[col][row] = piece + 2
+                    board[col+1][row] = piece + 2
+                    board[col+2][row] = piece + 2
+                    board[col+3][row] = piece + 2
                     self._haswon = True
+                    self._player_1_win = piece == self._player1piece
                     return True
         #check postive diagonal
         for col in range(self._cols-3):
             for row in range(self._rows-3):
                 if(board[col][row] != 0 and board[col][row] == board[col+1][row+1] \
                    and board[col+1][row+1] == board[col+2][row+2] and board[col+2][row+2] == board[col+3][row+3]):
-                    board[col][row] = self._winningpiece
-                    board[col+1][row+1] = self._winningpiece
-                    board[col+2][row+2] = self._winningpiece
-                    board[col+3][row+3] = self._winningpiece
+                    piece = board[col][row]
+                    board[col][row] = piece + 2
+                    board[col+1][row+1] = piece + 2
+                    board[col+2][row+2] = piece + 2
+                    board[col+3][row+3] = piece + 2
                     self._haswon = True
+                    self._player_1_win = piece == self._player1piece
                     return True
         #check negative diagonal
         for col in range(3, self._cols):
             for row in range(self._rows-3):
                 if(board[col][row] != 0 and board[col][row] == board[col-1][row+1] \
                    and board[col-1][row+1] == board[col-2][row+2] and board[col-2][row+2] == board[col-3][row+3]):
-                    board[col][row] = self._winningpiece
-                    board[col-1][row+1] = self._winningpiece
-                    board[col-2][row+2] = self._winningpiece
-                    board[col-3][row+3] = self._winningpiece
+                    piece = board[col][row]
+                    board[col][row] = piece + 2
+                    board[col-1][row+1] = piece + 2
+                    board[col-2][row+2] = piece + 2
+                    board[col-3][row+3] = piece + 2
                     self._haswon = True
+                    self._player_1_win = piece == self._player1piece
                     return True
         self._haswon = False
         return False
