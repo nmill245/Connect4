@@ -14,30 +14,29 @@ def min_max(maximizing_player: bool, alpha: float, beta: float, max_depth: int, 
     """
     An algorithm to return the best move to make at a given board position, looking 5 moves in advance
     """
-    board_copy = gameboard.copy()
-    if max_depth == 0 or board_copy.check_win():
-        return (-1, board_copy.score_board(maximizing_player))
+    if max_depth == 0 or gameboard.check_win():
+        return (-1, gameboard.score_board(maximizing_player))
     if maximizing_player:
         score:float = -math.inf
-        move_list: list[int] = board_copy.get_moves()
+        move_list: list[int] = gameboard.get_moves()
         commited_move:int = -1
         for move in move_list:
             commited_move = move
-            board_copy.add_move(move + 1, maximizing_player)
-            move, score = min_max(not maximizing_player, alpha, beta, max_depth - 1, board_copy)
-            board_copy.remove_move(move + 1, maximizing_player)
+            gameboard.add_move(move + 1, maximizing_player)
+            move, score = min_max(not maximizing_player, alpha, beta, max_depth - 1, gameboard)
+            gameboard.remove_move(move + 1, maximizing_player)
             if score > beta:
                 break
             alpha = max(alpha, score)
         return (commited_move, score)
     score:float = math.inf
-    move_list: list[int] = board_copy.get_moves()
+    move_list: list[int] = gameboard.get_moves()
     commited_move: int = -1
     for move in move_list:
         commited_move = move
-        board_copy.add_move(move + 1, maximizing_player)
-        move, score = min_max(not maximizing_player, alpha, beta, max_depth - 1, board_copy)
-        board_copy.remove_move(move + 1, maximizing_player)
+        gameboard.add_move(move + 1, maximizing_player)
+        move, score = min_max(not maximizing_player, alpha, beta, max_depth - 1, gameboard)
+        gameboard.remove_move(move + 1, maximizing_player)
         if score < alpha:
             break
         beta = score
@@ -66,7 +65,7 @@ def main():
                     player1_turn = not player1_turn
                 else:
                     game_board.print_board(player1_turn)
-                    move_col, _ = min_max(player1_turn, -math.inf, math.inf, 5, game_board)
+                    move_col, _ = min_max(player1_turn, -math.inf, math.inf, 5, game_board.copy())
                     game_board.add_move(move_col + 1, player1_turn)
                     player1_turn = not player1_turn
             game_board.print_board(not player1_turn)
