@@ -27,6 +27,9 @@ class Board():
         self._names = names
 
     def copy(self):
+        """
+        A function to generate a copy of the instance
+        """
         board_copy = Board(self._screen, self._names.copy())
         board_copy._board = self._board.copy()
         return board_copy
@@ -44,14 +47,17 @@ class Board():
             return curses.color_pair(curses.COLOR_YELLOW)
         return curses.color_pair(curses.COLOR_WHITE)
 
-    def score_board(self, player1_turn: bool) -> int:
+    def score_board(self) -> float:
         """
         A function to score the board at a given state
         """
         if self._haswon:
-            if (self._player_1_win and player1_turn) or (not self._player_1_win and not player1_turn):
+            if self._player_1_win:
+                return -100_000
+            if not self._player_1_win:
                 return 100_000
-            return -100_000
+        if len(self.get_moves()) == 0:
+            return 0
         player1score: int = 0
         player2score: int = 0
         return player1score - player2score
@@ -117,8 +123,9 @@ class Board():
         """
         movecol = col - 1
         move_removed = False
-        for i in range(self._rows - 1, -1, -1):
-            if (self._board[i][movecol] == self._player1piece and player1) or (self._board[i][movecol] == self._player2piece and not player1):
+        for i in range(self._rows):
+            if (self._board[i][movecol] == self._player1piece and player1) \
+                or (self._board[i][movecol] == self._player2piece and not player1):
                 self._board[i][movecol] = 0
                 move_removed = True
                 break
