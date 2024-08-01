@@ -58,8 +58,20 @@ class Board():
                 return 100_000
         if len(self.get_moves()) == 0:
             return 0
-        player1score: int = 0
-        player2score: int = 0
+        player1score = 0
+        player2score = 0
+        board = self._board
+        #count vertical
+        player1score += np.count_nonzero(board[:][3] == self._player1piece)
+        player2score += np.count_nonzero(board[:][3] == self._player2piece)
+        for col in range(self._cols - 3):
+            for row in range(self._rows):
+                if board[col][row] == self._player1piece and board[col+1][row] == board[col][row] \
+                and board[col+2][row] == board[col+1][row] and board[col+2][row] == board[col+3][row]:
+                    player1score += 400
+                if board[col][row] == self._player2piece and board[col+1][row] == board[col][row] \
+                and board[col+2][row] == board[col+1][row] and board[col+2][row] == board[col+3][row]:
+                    player2score -= 400
         return player1score - player2score
     def print_board(self, player1_turn):
         """
